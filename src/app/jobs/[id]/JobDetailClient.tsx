@@ -284,6 +284,15 @@ export default function JobDetailClient({ jobId }: { jobId: string }) {
             {t.jobDetail.paidOn} {formatDate(job.paidAt)}
           </p>
         )}
+        {job.invoiceId ? (
+          <Link href={`/invoices/${job.invoiceId}`} className="btn btn-outline">
+            🧾 {t.jobDetail.viewInvoice}
+          </Link>
+        ) : (
+          <Link href={`/invoices/new?jobId=${job.id}`} className="btn btn-outline">
+            🧾 {t.jobDetail.createInvoice}
+          </Link>
+        )}
       </section>
 
       <PhotoSection

@@ -34,6 +34,7 @@ interface JobRow {
   paid_at: string | null;
   status: string;
   scheduled_date: string | null;
+  invoice_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -67,6 +68,7 @@ function mapJob(row: JobRow, photos: JobPhoto[] = []): Job {
     paidAt: row.paid_at,
     status: row.status as JobStatus,
     scheduledDate: row.scheduled_date,
+    invoiceId: row.invoice_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     photos,
@@ -227,6 +229,25 @@ export async function listJobsByDateRange(
     SELECT * FROM jobs
     WHERE scheduled_date BETWEEN ${startDate} AND ${endDate}
     ORDER BY scheduled_date ASC, created_at ASC
+  `) as unknown as JobRow[];
+  return rows.map((r) => mapJob(r));
+}
+
+/** All jobs that don't yet belong to an invoice — the pool the invoice wizard picks from. */
+export async function listUninvoicedJobs(): Promise<Job[]> {
+  const sql = requireDb();
+  const rows = (await sql`
+    SELECT * FROM jobs WHERE invoice_id IS NULL ORDER BY created_at DESC
+  `) as unknown as JobRow[];
+  return rows.map((r) => mapJob(r));
+}
+
+/** Fetches a specific set of jobs by id, e.g. to validate an invoice's selected jobs. */
+export async function getJobsByIds(ids: string[]): Promise<Job[]> {
+  if (ids.length === 0) return [];
+  const sql = requireDb();
+  const rows = (await sql`
+    SELECT * FROM jobs WHERE id = ANY(${ids})
   `) as unknown as JobRow[];
   return rows.map((r) => mapJob(r));
 }

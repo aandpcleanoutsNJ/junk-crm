@@ -39,6 +39,16 @@ export interface Dict {
     couldNotAddPhotos: string;
     couldNotUploadGeneric: string;
     couldNotSave: string;
+    jobAlreadyInvoiced: string;
+    invoiceNotFound: string;
+    noJobsSelected: string;
+    noCustomerFound: string;
+    cannotEditInvoice: string;
+    couldNotLoadInvoices: string;
+    couldNotLoadInvoice: string;
+    couldNotLoadCustomers: string;
+    couldNotCreateInvoice: string;
+    couldNotDeleteInvoice: string;
   };
   login: {
     enterPin: string;
@@ -46,6 +56,7 @@ export interface Dict {
   home: {
     newJob: string;
     calendar: string;
+    invoices: string;
     notPaidLabel: string;
     unpaidHint: string;
     searchPlaceholder: string;
@@ -119,6 +130,8 @@ export interface Dict {
     enlargeAlt: string;
     removePhotoAria: string;
     jobSaved: string;
+    createInvoice: string;
+    viewInvoice: string;
   };
   shareModal: {
     title: string;
@@ -137,6 +150,60 @@ export interface Dict {
     noJobsThisDay: string;
     jobsOn: string;
     backToList: string;
+  };
+  invoices: {
+    title: string;
+    newInvoice: string;
+    unpaidLabel: string;
+    noInvoicesYet: string;
+    statusDraft: string;
+    statusSent: string;
+    statusPaid: string;
+  };
+  invoiceWizard: {
+    step1Title: string;
+    searchCustomers: string;
+    noCustomers: string;
+    uninvoicedJobsLabel: string;
+    step2Title: string;
+    selectAll: string;
+    noUninvoicedJobs: string;
+    continueButton: string;
+    step3Title: string;
+    addLine: string;
+    propertyAddressLabel: string;
+    descriptionLabel: string;
+    quantityLabel: string;
+    unitPriceLabel: string;
+    amountLabel: string;
+    removeLine: string;
+    removeLineConfirm: string;
+    subtotalLabel: string;
+    taxLabel: string;
+    totalLabel: string;
+    notesLabel: string;
+    notesPlaceholder: string;
+    saveInvoice: string;
+  };
+  invoiceDetail: {
+    billTo: string;
+    issueDate: string;
+    dueDate: string;
+    downloadPdf: string;
+    share: string;
+    editButton: string;
+    markSent: string;
+    markPaid: string;
+    markUnpaid: string;
+    deleteInvoice: string;
+    deleteConfirm: string;
+    paidOn: string;
+    notesHeading: string;
+    itemsHeading: string;
+    invoiceSaved: string;
+    shareNotSupportedHint: string;
+    editInvoiceTitle: string;
+    invoiceTitle: string;
   };
 }
 
@@ -172,6 +239,16 @@ const en: Dict = {
     couldNotAddPhotos: "Couldn't add photos.",
     couldNotUploadGeneric: "Couldn't upload photo.",
     couldNotSave: "Couldn't save. Check your internet connection and try again.",
+    jobAlreadyInvoiced: "One or more jobs are already on another invoice.",
+    invoiceNotFound: "Invoice not found.",
+    noJobsSelected: "Please select at least one job.",
+    noCustomerFound: "Customer not found.",
+    cannotEditInvoice: "This invoice can't be edited anymore.",
+    couldNotLoadInvoices: "Couldn't load invoices. Check your internet connection.",
+    couldNotLoadInvoice: "Couldn't load invoice. Check your internet connection.",
+    couldNotLoadCustomers: "Couldn't load customers. Check your internet connection.",
+    couldNotCreateInvoice: "Couldn't create the invoice. Please try again.",
+    couldNotDeleteInvoice: "Couldn't delete the invoice. Please try again.",
   },
   login: {
     enterPin: "Enter PIN",
@@ -179,6 +256,7 @@ const en: Dict = {
   home: {
     newJob: "New Job",
     calendar: "Calendar",
+    invoices: "Invoices",
     notPaidLabel: "Not paid:",
     unpaidHint: "(showing unpaid only, tap to clear)",
     searchPlaceholder: "Search name, phone, or address",
@@ -252,6 +330,8 @@ const en: Dict = {
     enlargeAlt: "Enlarge photo",
     removePhotoAria: "Remove photo",
     jobSaved: "Job saved ✓",
+    createInvoice: "Create Invoice",
+    viewInvoice: "View Invoice",
   },
   shareModal: {
     title: "Share Photo",
@@ -271,6 +351,61 @@ const en: Dict = {
     noJobsThisDay: "No jobs scheduled",
     jobsOn: "Jobs on",
     backToList: "Back to list",
+  },
+  invoices: {
+    title: "Invoices",
+    newInvoice: "New Invoice",
+    unpaidLabel: "Unpaid invoices:",
+    noInvoicesYet: "No invoices yet. Tap + New Invoice to add one.",
+    statusDraft: "Draft",
+    statusSent: "Sent",
+    statusPaid: "Paid",
+  },
+  invoiceWizard: {
+    step1Title: "Pick Customer",
+    searchCustomers: "Search name or phone",
+    noCustomers: "No customers with uninvoiced jobs yet.",
+    uninvoicedJobsLabel: "uninvoiced jobs",
+    step2Title: "Select Jobs",
+    selectAll: "Select All",
+    noUninvoicedJobs: "This customer has no uninvoiced jobs.",
+    continueButton: "Continue",
+    step3Title: "Review Invoice",
+    addLine: "+ Add Line",
+    propertyAddressLabel: "Property Address",
+    descriptionLabel: "Description",
+    quantityLabel: "Qty",
+    unitPriceLabel: "Price",
+    amountLabel: "Amount",
+    removeLine: "Remove line",
+    removeLineConfirm: "Remove this line?",
+    subtotalLabel: "Subtotal",
+    taxLabel: "Tax %",
+    totalLabel: "Total",
+    notesLabel: "Notes (optional)",
+    notesPlaceholder: "Any notes for the customer...",
+    saveInvoice: "Save Invoice",
+  },
+  invoiceDetail: {
+    billTo: "Bill To",
+    issueDate: "Issue date",
+    dueDate: "Due date",
+    downloadPdf: "Download PDF",
+    share: "Share",
+    editButton: "Edit",
+    markSent: "Mark Sent",
+    markPaid: "Mark Paid",
+    markUnpaid: "Mark Not Paid",
+    deleteInvoice: "Delete Invoice",
+    deleteConfirm: "Delete this invoice? Its jobs will become available to invoice again.",
+    paidOn: "Paid on",
+    notesHeading: "Notes",
+    itemsHeading: "Items",
+    invoiceSaved: "Invoice saved ✓",
+    shareNotSupportedHint:
+      "Sharing isn't supported on this device. The PDF will download instead.",
+    editInvoiceTitle: "Edit Invoice",
+    invoiceTitle: "INVOICE",
   },
 };
 
@@ -307,6 +442,16 @@ const es: Dict = {
     couldNotAddPhotos: "No se pudieron agregar las fotos.",
     couldNotUploadGeneric: "No se pudo subir la foto.",
     couldNotSave: "No se pudo guardar. Revisa tu conexión a internet e inténtalo de nuevo.",
+    jobAlreadyInvoiced: "Uno o más trabajos ya están en otra factura.",
+    invoiceNotFound: "Factura no encontrada.",
+    noJobsSelected: "Por favor selecciona al menos un trabajo.",
+    noCustomerFound: "Cliente no encontrado.",
+    cannotEditInvoice: "Esta factura ya no se puede editar.",
+    couldNotLoadInvoices: "No se pudieron cargar las facturas. Revisa tu conexión a internet.",
+    couldNotLoadInvoice: "No se pudo cargar la factura. Revisa tu conexión a internet.",
+    couldNotLoadCustomers: "No se pudieron cargar los clientes. Revisa tu conexión a internet.",
+    couldNotCreateInvoice: "No se pudo crear la factura. Inténtalo de nuevo.",
+    couldNotDeleteInvoice: "No se pudo eliminar la factura. Inténtalo de nuevo.",
   },
   login: {
     enterPin: "Ingresa el PIN",
@@ -314,6 +459,7 @@ const es: Dict = {
   home: {
     newJob: "Nuevo Trabajo",
     calendar: "Calendario",
+    invoices: "Facturas",
     notPaidLabel: "No pagado:",
     unpaidHint: "(mostrando solo no pagados, toca para quitar el filtro)",
     searchPlaceholder: "Buscar nombre, teléfono o dirección",
@@ -387,6 +533,8 @@ const es: Dict = {
     enlargeAlt: "Ampliar foto",
     removePhotoAria: "Quitar foto",
     jobSaved: "Trabajo guardado ✓",
+    createInvoice: "Crear Factura",
+    viewInvoice: "Ver Factura",
   },
   shareModal: {
     title: "Compartir Foto",
@@ -406,6 +554,62 @@ const es: Dict = {
     noJobsThisDay: "No hay trabajos programados",
     jobsOn: "Trabajos el",
     backToList: "Volver a la lista",
+  },
+  invoices: {
+    title: "Facturas",
+    newInvoice: "Nueva Factura",
+    unpaidLabel: "Facturas sin pagar:",
+    noInvoicesYet: "Aún no hay facturas. Toca + Nueva Factura para agregar una.",
+    statusDraft: "Borrador",
+    statusSent: "Enviada",
+    statusPaid: "Pagada",
+  },
+  invoiceWizard: {
+    step1Title: "Elegir Cliente",
+    searchCustomers: "Buscar nombre o teléfono",
+    noCustomers: "Aún no hay clientes con trabajos sin facturar.",
+    uninvoicedJobsLabel: "trabajos sin facturar",
+    step2Title: "Seleccionar Trabajos",
+    selectAll: "Seleccionar Todos",
+    noUninvoicedJobs: "Este cliente no tiene trabajos sin facturar.",
+    continueButton: "Continuar",
+    step3Title: "Revisar Factura",
+    addLine: "+ Agregar Línea",
+    propertyAddressLabel: "Dirección de la Propiedad",
+    descriptionLabel: "Descripción",
+    quantityLabel: "Cant.",
+    unitPriceLabel: "Precio",
+    amountLabel: "Monto",
+    removeLine: "Quitar línea",
+    removeLineConfirm: "¿Quitar esta línea?",
+    subtotalLabel: "Subtotal",
+    taxLabel: "Impuesto %",
+    totalLabel: "Total",
+    notesLabel: "Notas (opcional)",
+    notesPlaceholder: "Alguna nota para el cliente...",
+    saveInvoice: "Guardar Factura",
+  },
+  invoiceDetail: {
+    billTo: "Facturar A",
+    issueDate: "Fecha de emisión",
+    dueDate: "Fecha de vencimiento",
+    downloadPdf: "Descargar PDF",
+    share: "Compartir",
+    editButton: "Editar",
+    markSent: "Marcar Enviada",
+    markPaid: "Marcar Pagada",
+    markUnpaid: "Marcar No Pagada",
+    deleteInvoice: "Eliminar Factura",
+    deleteConfirm:
+      "¿Eliminar esta factura? Sus trabajos quedarán disponibles para facturar de nuevo.",
+    paidOn: "Pagada el",
+    notesHeading: "Notas",
+    itemsHeading: "Artículos",
+    invoiceSaved: "Factura guardada ✓",
+    shareNotSupportedHint:
+      "Compartir no es compatible con este dispositivo. El PDF se descargará en su lugar.",
+    editInvoiceTitle: "Editar Factura",
+    invoiceTitle: "FACTURA",
   },
 };
 

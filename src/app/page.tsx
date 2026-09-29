@@ -70,6 +70,10 @@ export default function HomePage() {
         📅 {t.home.calendar}
       </Link>
 
+      <Link href="/invoices" className="btn btn-outline">
+        🧾 {t.home.invoices}
+      </Link>
+
       {jobs && (
         <button
           type="button"

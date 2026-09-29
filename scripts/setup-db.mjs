@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// Creates the `jobs` and `job_photos` tables in Neon. Safe to run more than
-// once (uses IF NOT EXISTS everywhere).
+// Creates the `jobs`, `job_photos`, `invoices`, and `invoice_items` tables in
+// Neon. Safe to run more than once (uses IF NOT EXISTS everywhere) — also
+// the way to pick up new columns/tables added by later updates.
 //
 // How to run it:
 //   1. Connect Neon to this project in Vercel (Storage -> Marketplace ->
@@ -94,10 +95,62 @@ async function main() {
   // Upgrade path for databases created before before/after photos existed.
   await sql`ALTER TABLE job_photos ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'general';`;
 
+  console.log("Creating invoice_number_seq sequence...");
+  // Numeric part of invoice numbers like JH-1001. Never reused, even if an
+  // insert is rolled back — that's exactly what we want for invoice numbers.
+  await sql`CREATE SEQUENCE IF NOT EXISTS invoice_number_seq START 1001;`;
+
+  console.log("Creating invoices table...");
+  await sql`
+    CREATE TABLE IF NOT EXISTS invoices (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      invoice_number TEXT NOT NULL UNIQUE,
+      bill_to_name TEXT NOT NULL DEFAULT '',
+      bill_to_phone TEXT NOT NULL DEFAULT '',
+      bill_to_email TEXT NOT NULL DEFAULT '',
+      bill_to_street TEXT NOT NULL DEFAULT '',
+      bill_to_city TEXT NOT NULL DEFAULT '',
+      bill_to_state TEXT NOT NULL DEFAULT '',
+      bill_to_zip TEXT NOT NULL DEFAULT '',
+      issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+      due_date DATE NOT NULL,
+      status TEXT NOT NULL DEFAULT 'draft',
+      tax_rate NUMERIC(6, 3) NOT NULL DEFAULT 0,
+      notes TEXT NOT NULL DEFAULT '',
+      paid_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+  `;
+
+  console.log("Creating invoice_items table...");
+  await sql`
+    CREATE TABLE IF NOT EXISTS invoice_items (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+      job_id UUID REFERENCES jobs(id) ON DELETE SET NULL,
+      property_address TEXT NOT NULL DEFAULT '',
+      description TEXT NOT NULL DEFAULT '',
+      quantity NUMERIC(10, 2) NOT NULL DEFAULT 1,
+      unit_price_cents INTEGER NOT NULL DEFAULT 0,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+  `;
+
+  console.log("Linking jobs to invoices...");
+  // A job can belong to at most one invoice. Deleting an invoice clears this
+  // (ON DELETE SET NULL), freeing the job to be invoiced again.
+  await sql`ALTER TABLE jobs ADD COLUMN IF NOT EXISTS invoice_id UUID REFERENCES invoices(id) ON DELETE SET NULL;`;
+
   console.log("Creating indexes...");
   await sql`CREATE INDEX IF NOT EXISTS jobs_created_at_idx ON jobs (created_at DESC);`;
   await sql`CREATE INDEX IF NOT EXISTS jobs_scheduled_date_idx ON jobs (scheduled_date);`;
+  await sql`CREATE INDEX IF NOT EXISTS jobs_invoice_id_idx ON jobs (invoice_id);`;
   await sql`CREATE INDEX IF NOT EXISTS job_photos_job_id_idx ON job_photos (job_id);`;
+  await sql`CREATE INDEX IF NOT EXISTS invoices_created_at_idx ON invoices (created_at DESC);`;
+  await sql`CREATE INDEX IF NOT EXISTS invoices_status_idx ON invoices (status);`;
+  await sql`CREATE INDEX IF NOT EXISTS invoice_items_invoice_id_idx ON invoice_items (invoice_id);`;
 
   console.log("Done! Tables are ready.");
 }
